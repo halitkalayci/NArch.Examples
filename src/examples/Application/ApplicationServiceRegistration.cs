@@ -20,6 +20,10 @@ using NArchitecture.Core.Mailing;
 using NArchitecture.Core.Mailing.MailKit;
 using NArchitecture.Core.Security.DependencyInjection;
 using Application.Services.Brands;
+using Application.Services.RequestConfigs;
+using NArchitecture.Core.Security.JWT;
+using Application.Services.RequestOperationClaims;
+using Application.Services.OperationClaims;
 
 namespace Application;
 
@@ -29,7 +33,8 @@ public static class ApplicationServiceRegistration
         this IServiceCollection services,
         MailSettings mailSettings,
         FileLogConfiguration fileLogConfiguration,
-        ElasticSearchConfig elasticSearchConfig
+        ElasticSearchConfig elasticSearchConfig,
+        TokenOptions tokenOptions
     )
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -55,12 +60,16 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAuthService, AuthManager>();
         services.AddScoped<IAuthenticatorService, AuthenticatorManager>();
         services.AddScoped<IUserService, UserManager>();
+        services.AddScoped<IOperationClaimService, OperationClaimManager>();
+
 
         services.AddYamlResourceLocalization();
 
-        services.AddSecurityServices<Guid, int>();
+        services.AddSecurityServices<Guid, int, Guid>(tokenOptions);
 
         services.AddScoped<IBrandService, BrandManager>();
+        services.AddScoped<IRequestConfigService, RequestConfigManager>();
+        services.AddScoped<IRequestOperationClaimsService, RequestOperationClaimsManager>();
         return services;
     }
 

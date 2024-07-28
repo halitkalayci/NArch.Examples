@@ -297,6 +297,42 @@ namespace Persistence.Migrations
                             Id = 29,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Brands.Delete"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "RequestConfigs.Admin"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "RequestConfigs.Read"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "RequestConfigs.Write"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "RequestConfigs.Create"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "RequestConfigs.Update"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "RequestConfigs.Delete"
                         });
                 });
 
@@ -399,6 +435,65 @@ namespace Persistence.Migrations
                     b.ToTable("RefreshTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.RequestConfig", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<string>("RequestName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RequestName");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequestConfigs", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.RequestOperationClaims", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OperationClaimId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RequestConfigId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationClaimId");
+
+                    b.HasIndex("RequestConfigId");
+
+                    b.ToTable("RequestOperationClaims");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -444,12 +539,12 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9990f432-a69d-49cf-b8c2-088d970f6bc4"),
+                            Id = new Guid("25862fc0-f0d9-4483-8573-a64ad07514e6"),
                             AuthenticatorType = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "narch@kodlama.io",
-                            PasswordHash = new byte[] { 131, 63, 235, 77, 162, 77, 207, 45, 150, 148, 194, 25, 146, 145, 41, 56, 10, 223, 184, 33, 132, 79, 82, 71, 53, 117, 250, 236, 65, 129, 20, 183, 111, 19, 37, 42, 98, 13, 16, 95, 121, 160, 95, 240, 15, 51, 130, 14, 26, 190, 8, 65, 96, 95, 233, 46, 56, 29, 186, 154, 115, 230, 91, 144 },
-                            PasswordSalt = new byte[] { 8, 69, 113, 233, 246, 52, 77, 155, 140, 35, 42, 52, 0, 43, 218, 96, 202, 169, 104, 85, 120, 139, 10, 97, 78, 90, 47, 73, 136, 148, 65, 198, 223, 76, 138, 4, 246, 77, 161, 136, 238, 252, 238, 238, 90, 86, 226, 253, 27, 56, 63, 122, 176, 83, 120, 50, 92, 184, 126, 229, 56, 1, 160, 170, 18, 45, 21, 237, 60, 118, 207, 67, 212, 195, 84, 238, 81, 227, 34, 215, 200, 57, 69, 76, 137, 212, 249, 195, 145, 175, 202, 145, 94, 234, 194, 236, 135, 30, 19, 243, 3, 109, 122, 29, 37, 128, 139, 235, 3, 21, 34, 39, 212, 139, 111, 71, 112, 182, 230, 83, 14, 115, 179, 65, 119, 94, 75, 103 }
+                            PasswordHash = new byte[] { 127, 89, 160, 97, 156, 134, 32, 57, 201, 5, 120, 58, 113, 26, 255, 189, 168, 15, 47, 174, 54, 168, 111, 78, 170, 111, 91, 209, 66, 175, 100, 83, 147, 6, 18, 133, 145, 26, 152, 255, 214, 157, 212, 215, 202, 201, 171, 35, 89, 66, 71, 169, 25, 239, 252, 216, 210, 198, 179, 49, 225, 248, 221, 26 },
+                            PasswordSalt = new byte[] { 4, 33, 144, 251, 127, 80, 26, 203, 84, 83, 118, 248, 40, 233, 44, 12, 52, 168, 144, 176, 205, 130, 232, 232, 150, 134, 231, 237, 134, 152, 29, 62, 55, 243, 254, 89, 125, 201, 132, 245, 26, 238, 245, 227, 190, 218, 205, 3, 108, 178, 120, 101, 129, 217, 123, 212, 40, 248, 169, 108, 236, 26, 49, 193, 184, 125, 164, 48, 67, 133, 77, 239, 80, 63, 221, 137, 238, 106, 49, 8, 184, 19, 236, 177, 192, 5, 33, 62, 131, 161, 41, 18, 88, 0, 255, 173, 199, 127, 127, 66, 237, 239, 191, 53, 104, 197, 18, 220, 81, 155, 118, 24, 185, 149, 214, 76, 207, 124, 212, 91, 20, 81, 68, 209, 42, 248, 43, 252 }
                         });
                 });
 
@@ -491,10 +586,10 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7b944e6b-d1f0-4853-863c-d4322ec4a9cc"),
+                            Id = new Guid("69cd90a3-12b4-43f9-88ab-367db8ab0438"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OperationClaimId = 1,
-                            UserId = new Guid("9990f432-a69d-49cf-b8c2-088d970f6bc4")
+                            UserId = new Guid("25862fc0-f0d9-4483-8573-a64ad07514e6")
                         });
                 });
 
@@ -531,6 +626,25 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RequestOperationClaims", b =>
+                {
+                    b.HasOne("Domain.Entities.OperationClaim", "OperationClaim")
+                        .WithMany()
+                        .HasForeignKey("OperationClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.RequestConfig", "RequestConfig")
+                        .WithMany("RequestOperationClaims")
+                        .HasForeignKey("RequestConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OperationClaim");
+
+                    b.Navigation("RequestConfig");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserOperationClaim", b =>
                 {
                     b.HasOne("Domain.Entities.OperationClaim", "OperationClaim")
@@ -548,6 +662,11 @@ namespace Persistence.Migrations
                     b.Navigation("OperationClaim");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RequestConfig", b =>
+                {
+                    b.Navigation("RequestOperationClaims");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

@@ -1,0 +1,114 @@
+<div style="margin: 5rem">
+  <input
+    pInputText
+    type="text"
+    (input)="filterGlobal($event)"
+    class="mb-5"
+    placeholder="Search keyword"
+  />
+  <p-table
+    #dt2
+    class="table"
+    [tableStyleClass]="'table'"
+    [value]="configs.items!"
+    dataKey="id"
+    editMode="row"
+    [globalFilterFields]="['requestName']"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Request Adı</th>
+        <th>Yetkiler</th>
+        <th>Aksiyonlar</th>
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-product
+      let-editing="editing"
+      let-ri="rowIndex"
+    >
+      <tr [pEditableRow]="product">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="product.requestName"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ product.requestName }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <p-multiSelect
+                [options]="operationClaims"
+                [(ngModel)]="product.claimIds"
+                optionLabel="name"
+                optionValue="id"
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              <p-button
+                (onClick)="op.toggle($event)"
+                icon="pi pi-info"
+                label="Görüntüle"
+                size="small"
+              />
+              <p-overlayPanel #op>
+                <div class="grid">
+                  @for(i of product.claims; track i;) {
+                  <div class="col-4 gap-0">
+                    <p-badge styleClass="w-100" [value]="i.name"></p-badge>
+                  </div>
+                  }
+                </div>
+              </p-overlayPanel>
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="">
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              pInitEditableRow
+              icon="pi pi-pencil"
+              (click)="onRowEditInit(product)"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pSaveEditableRow
+              icon="pi pi-check"
+              (click)="onRowEditSave(product)"
+              class="p-button-rounded p-button-text p-button-success mr-2"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-times"
+              (click)="onRowEditCancel(product, ri)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

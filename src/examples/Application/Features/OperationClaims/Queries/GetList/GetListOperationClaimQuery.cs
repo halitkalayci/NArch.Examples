@@ -10,24 +10,13 @@ using NArchitecture.Core.Persistence.Paging;
 
 namespace Application.Features.OperationClaims.Queries.GetList;
 
-public class GetListOperationClaimQuery : IRequest<GetListResponse<GetListOperationClaimListItemDto>>, ISecuredRequest
+public class GetListOperationClaimQuery : IRequest<List<OperationClaim>>, ISecuredRequest
 {
-    public PageRequest PageRequest { get; set; }
-
     public string[] Roles => [OperationClaimsOperationClaims.Read];
 
-    public GetListOperationClaimQuery()
-    {
-        PageRequest = new PageRequest { PageIndex = 0, PageSize = 10 };
-    }
-
-    public GetListOperationClaimQuery(PageRequest pageRequest)
-    {
-        PageRequest = pageRequest;
-    }
 
     public class GetListOperationClaimQueryHandler
-        : IRequestHandler<GetListOperationClaimQuery, GetListResponse<GetListOperationClaimListItemDto>>
+        : IRequestHandler<GetListOperationClaimQuery, List<OperationClaim>>
     {
         private readonly IOperationClaimRepository _operationClaimRepository;
         private readonly IMapper _mapper;
@@ -38,22 +27,16 @@ public class GetListOperationClaimQuery : IRequest<GetListResponse<GetListOperat
             _mapper = mapper;
         }
 
-        public async Task<GetListResponse<GetListOperationClaimListItemDto>> Handle(
+        public async Task<List<OperationClaim>> Handle(
             GetListOperationClaimQuery request,
             CancellationToken cancellationToken
         )
         {
-            IPaginate<OperationClaim> operationClaims = await _operationClaimRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize,
-                enableTracking: false,
-                cancellationToken: cancellationToken
-            );
+            List<OperationClaim> operationClaims = _operationClaimRepository.Query(
+            ).ToList();
 
-            GetListResponse<GetListOperationClaimListItemDto> response = _mapper.Map<
-                GetListResponse<GetListOperationClaimListItemDto>
-            >(operationClaims);
-            return response;
+           
+            return operationClaims;
         }
     }
 }

@@ -6,6 +6,7 @@ using Application.Features.Brands.Queries.GetList;
 using NArchitecture.Core.Application.Requests;
 using NArchitecture.Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace WebAPI.Controllers;
 
@@ -13,6 +14,7 @@ namespace WebAPI.Controllers;
 [ApiController]
 public class BrandsController : BaseController
 {
+
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateBrandCommand createBrandCommand)
     {

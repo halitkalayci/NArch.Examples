@@ -6,15 +6,15 @@ using Domain.Entities;
 using NArchitecture.Core.Application.Pipelines.Authorization;
 using MediatR;
 using static Application.Features.Brands.Constants.BrandsOperationClaims;
+using Application.Configuration.Services;
+using Application.Configuration.Abstraction;
 
 namespace Application.Features.Brands.Commands.Create;
 
-public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ISecuredRequest
+public class CreateBrandCommand : SecuredRequestBase, IRequest<CreatedBrandResponse>
 {
     public string Name { get; set; }
     public string? LogoUrl { get; set; }
-
-    public string[] Roles => [Admin, Write, BrandsOperationClaims.Create];
 
     public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, CreatedBrandResponse>
     {

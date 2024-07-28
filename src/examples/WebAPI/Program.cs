@@ -1,6 +1,8 @@
 using Application;
+using Application.Configuration.Services;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NArchitecture.Core.CrossCuttingConcerns.Exception.WebApi.Extensions;
@@ -15,6 +17,7 @@ using NArchitecture.Core.Security.WebApi.Swagger.Extensions;
 using Persistence;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using WebAPI;
+using Application.Configuration.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +30,9 @@ builder.Services.AddApplicationServices(
         .Get<FileLogConfiguration>()
         ?? throw new InvalidOperationException("FileLogConfiguration section cannot found in configuration."),
     elasticSearchConfig: builder.Configuration.GetSection("ElasticSearchConfig").Get<ElasticSearchConfig>()
-        ?? throw new InvalidOperationException("ElasticSearchConfig section cannot found in configuration.")
+        ?? throw new InvalidOperationException("ElasticSearchConfig section cannot found in configuration."),
+    tokenOptions: builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>()
+        ?? throw new InvalidOperationException("TokenOptions section cannot found in configuration.")
 );
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
@@ -53,7 +58,10 @@ builder
         };
     });
 
-builder.Services.AddDistributedMemoryCache();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(opt =>
@@ -97,6 +105,10 @@ if (app.Environment.IsProduction())
     app.ConfigureCustomExceptionMiddleware();
 
 app.UseDbMigrationApplier();
+
+ServiceProviderExtensions.SetServiceProvider(app.Services);
+
+app.Services.LoadConfigLoader();
 
 app.UseAuthentication();
 app.UseAuthorization();

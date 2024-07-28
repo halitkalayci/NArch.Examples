@@ -28,9 +28,9 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
+    public async Task<IActionResult> Login([FromBody] LoginForControllerDto userForLoginDto)
     {
-        LoginCommand loginCommand = new() { UserForLoginDto = userForLoginDto, IpAddress = getIpAddress() };
+        LoginCommand loginCommand = new() { UserForLoginDto = new() { Email = userForLoginDto.Email, Password = userForLoginDto.Password, AuthenticatorCode = userForLoginDto.AuthenticatorCode }, IpAddress = getIpAddress() };
         LoggedResponse result = await Mediator.Send(loginCommand);
 
         if (result.RefreshToken is not null)
@@ -40,9 +40,10 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Register")]
-    public async Task<IActionResult> Register([FromBody] UserForRegisterDto userForRegisterDto)
+    public async Task<IActionResult> Register([FromBody] RegisterForControllerDto userForRegisterDto)
     {
-        RegisterCommand registerCommand = new() { UserForRegisterDto = userForRegisterDto, IpAddress = getIpAddress() };
+
+        RegisterCommand registerCommand = new() { UserForRegisterDto = new() { Email=userForRegisterDto.Email, Password=userForRegisterDto.Password }, IpAddress = getIpAddress() };
         RegisteredResponse result = await Mediator.Send(registerCommand);
         setRefreshTokenToCookie(result.RefreshToken);
         return Created(uri: "", result.AccessToken);
@@ -118,5 +119,19 @@ public class AuthController : BaseController
     {
         CookieOptions cookieOptions = new() { HttpOnly = true, Expires = DateTime.UtcNow.AddDays(7) };
         Response.Cookies.Append(key: "refreshToken", refreshToken.Token, cookieOptions);
+    }
+
+
+    public class LoginForControllerDto
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string AuthenticatorCode { get; set; }
+    }
+
+    public class RegisterForControllerDto
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

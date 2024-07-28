@@ -1,0 +1,16 @@
+.table,
+.p-datatable-wrapper {
+  height: 100vh;
+}
+::ng-deep {
+  .p-datatable-wrapper {
+    height: 100vh;
+  }
+  p-badge {
+    span {
+      width: 100%;
+      text-align: center;
+      font-size: 11px;
+    }
+  }
+}

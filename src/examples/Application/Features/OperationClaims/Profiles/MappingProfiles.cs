@@ -23,5 +23,6 @@ public class MappingProfiles : Profile
         CreateMap<OperationClaim, GetByIdOperationClaimResponse>().ReverseMap();
         CreateMap<OperationClaim, GetListOperationClaimListItemDto>().ReverseMap();
         CreateMap<IPaginate<OperationClaim>, GetListResponse<GetListOperationClaimListItemDto>>().ReverseMap();
+        CreateMap<List<OperationClaim>, GetListResponse<GetListOperationClaimListItemDto>>().ReverseMap();
     }
 }

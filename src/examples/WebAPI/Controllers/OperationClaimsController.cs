@@ -3,6 +3,7 @@ using Application.Features.OperationClaims.Commands.Delete;
 using Application.Features.OperationClaims.Commands.Update;
 using Application.Features.OperationClaims.Queries.GetById;
 using Application.Features.OperationClaims.Queries.GetList;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using NArchitecture.Core.Application.Requests;
 using NArchitecture.Core.Application.Responses;
@@ -21,10 +22,10 @@ public class OperationClaimsController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
+    public async Task<ActionResult<List<OperationClaim>>> GetList()
     {
-        GetListOperationClaimQuery getListOperationClaimQuery = new() { PageRequest = pageRequest };
-        GetListResponse<GetListOperationClaimListItemDto> result = await Mediator.Send(getListOperationClaimQuery);
+        GetListOperationClaimQuery getListOperationClaimQuery = new() { };
+        var result = await Mediator.Send(getListOperationClaimQuery);
         return Ok(result);
     }
 

@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NArchitecture.Core.Security.Constants;
 using Application.Features.Brands.Constants;
+using Application.Features.RequestConfigs.Constants;
+using Application.Features.RequestOperationClaims.Constants;
 
 namespace Persistence.EntityConfigurations;
 
@@ -108,6 +110,34 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
                 new() { Id = ++lastId, Name = BrandsOperationClaims.Create },
                 new() { Id = ++lastId, Name = BrandsOperationClaims.Update },
                 new() { Id = ++lastId, Name = BrandsOperationClaims.Delete },
+            ]
+        );
+        #endregion
+        
+        
+        #region RequestConfigs
+        featureOperationClaims.AddRange(
+            [
+                new() { Id = ++lastId, Name = RequestConfigsOperationClaims.Admin },
+                new() { Id = ++lastId, Name = RequestConfigsOperationClaims.Read },
+                new() { Id = ++lastId, Name = RequestConfigsOperationClaims.Write },
+                new() { Id = ++lastId, Name = RequestConfigsOperationClaims.Create },
+                new() { Id = ++lastId, Name = RequestConfigsOperationClaims.Update },
+                new() { Id = ++lastId, Name = RequestConfigsOperationClaims.Delete },
+            ]
+        );
+        #endregion
+        
+        
+        #region RequestOperationClaims
+        featureOperationClaims.AddRange(
+            [
+                new() { Id = ++lastId, Name = RequestOperationClaimsOperationClaims.Admin },
+                new() { Id = ++lastId, Name = RequestOperationClaimsOperationClaims.Read },
+                new() { Id = ++lastId, Name = RequestOperationClaimsOperationClaims.Write },
+                new() { Id = ++lastId, Name = RequestOperationClaimsOperationClaims.Create },
+                new() { Id = ++lastId, Name = RequestOperationClaimsOperationClaims.Update },
+                new() { Id = ++lastId, Name = RequestOperationClaimsOperationClaims.Delete },
             ]
         );
         #endregion
